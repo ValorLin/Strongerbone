@@ -2,7 +2,6 @@ Strongerbone
 ============
 
 # S.View 类 #
-# Strongerbone View #
 扩展了 Backbone.View 的一些基本功能。
 
 ## 主要特性 ##
