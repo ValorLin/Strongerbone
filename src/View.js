@@ -9,8 +9,6 @@
     S.View = Backbone.View.extend({
         // 视图模板
         template: '',
-        // 指定 view 渲染完毕后要添加到哪个页面元素中。
-        appendTo: '',
         // 可以选择 model 作为数据源，也可以选择 data 。
         // `如果都给的话，则只取 model ，但最好别这么做。`
         model: null,
@@ -23,7 +21,6 @@
             this.model = opts.model || this.model || null;
             this.data = opts.data || this.data || {};
             this.hidden = opts.hidden || this.hidden || false;
-            this.appendTo = opts.appendTo || this.appendTo || '';
 
             if (this.model) {
                 this.data = this.model.attributes;
@@ -34,8 +31,6 @@
 
             // 自动随 model 变化更新视图
             this.model.on('change', this.render, this);
-            // appendToParent 只执行一次
-            this.appendToParent = _.once(this.appendToParent);
             return Backbone.View.apply(this, arguments);
         },
 
@@ -62,15 +57,10 @@
                 || (_compiledTplCache[template] = _.template(template));
         },
 
-        appendToParent: function () {
-            if (!this.appendTo) return;
+        render: function () {
+            _.result(this.beforeRender);
+            this.trigger('beforeRender');
 
-            var $parent = this.appendTo.append ?
-                this.appendTo : $(this.appendTo);
-            $parent.append(this.$el);
-        },
-
-        renderDom: function () {
             var template, compiledTpl, html,
                 $el = this.$el;
 
@@ -79,19 +69,12 @@
             html = this.applyTemplate(compiledTpl, this.model);
             $el.html(html);
             this.hidden && $el.hide();
-        },
-
-        render: function () {
-            _.result(this.beforeRender);
-            this.trigger('beforeRender');
-
-            this.renderDom();
-            this.appendToParent();
 
             _.result(this.afterRender);
             this.trigger('afterRender');
             return this;
         },
+        
         find: function (selector) {return this.$el.find(selector);},
         show: function () {this.$el.show();},
         hide: function () {this.$el.hide();}
