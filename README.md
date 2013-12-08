@@ -13,15 +13,15 @@ Strongerbone
 ## 示例： ##
 
 ### 初始 html 页面 ###
-`<div id="header"></div>`
+    <div id="header"></div>
 
 ### js 脚本 ###
-var MyView = S.View.extend({
-    appendTo: '#header',
-    template: '<div>{{= it.name}}</div>',
-});
-var myView = new MyView({data: {name: "weilao"}});
-myView.render();
+    var MyView = S.View.extend({
+        appendTo: '#header',
+        template: '<div>{{= it.name}}</div>',
+    });
+    var myView = new MyView({data: {name: "weilao"}});
+    myView.render();
 
 ### 渲染结果 ###
-`<div id="header"><div>weilao</div></div>`
+    <div id="header"><div>weilao</div></div>
